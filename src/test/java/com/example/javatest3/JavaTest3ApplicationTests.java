@@ -28,7 +28,7 @@ class JavaTest3ApplicationTests {
 
     @Test
     public void test1(){
-        MyAdmin admin = new MyAdmin(1,"admin",5,"北京","yy");
+        MyAdmin admin = new MyAdmin(1,"admin",5,"北京","yy","159");
         int i = myAdminService.addMyAdmin(admin);
         if(i>0){
             MyAdmin admin1 = myAdminService.firstMyAdmin(1);

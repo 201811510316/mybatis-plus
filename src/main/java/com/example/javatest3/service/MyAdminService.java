@@ -23,4 +23,6 @@ public interface MyAdminService {
     //查
     List<MyAdmin> AllMyAdmin();
 
+    //
+    MyAdmin firstMyAdminByName(String name);
 }

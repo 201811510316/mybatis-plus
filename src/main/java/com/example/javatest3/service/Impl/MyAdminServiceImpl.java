@@ -43,4 +43,11 @@ public class MyAdminServiceImpl implements MyAdminService {
     public List<MyAdmin> AllMyAdmin() {
         return myAdminDao.selectList(null);
     }
+
+    @Override
+    public MyAdmin firstMyAdminByName(String name) {
+        QueryWrapper<MyAdmin> wrapper = new QueryWrapper<>();
+        wrapper.eq("admin_name",name);
+        return myAdminDao.selectOne(wrapper);
+    }
 }
