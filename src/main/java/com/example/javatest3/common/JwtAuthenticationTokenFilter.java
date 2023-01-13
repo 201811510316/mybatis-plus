@@ -14,6 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 public class JwtAuthenticationTokenFilter implements HandlerInterceptor {
 
@@ -39,14 +40,14 @@ public class JwtAuthenticationTokenFilter implements HandlerInterceptor {
                 if(token==null){
                     throw new RuntimeException("没有token，请重新登录");
                 }
-                String username;
-                try {
-                    Claims claims = Token.parseJWT(token);
-                    username=claims.getAudience();
-                } catch (Exception e) {
-                    throw new RuntimeException("401");
+                Claims claims = Token.parseJWT(token);
+                Date expiration = claims.getExpiration();
+                Date date = new Date(System.currentTimeMillis());
+                if(expiration.getTime()<date.getTime()){
+                    throw new RuntimeException("token过期，请重新登录");
                 }
 
+                String username=claims.getAudience();
                 MyAdmin admin = myAdminService.firstMyAdminByName(username);
                 if(admin==null){
                     throw new RuntimeException("用户不存在");
