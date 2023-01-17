@@ -1,5 +1,6 @@
 package com.example.javatest3.common;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.example.javatest3.annotation.JwtUserLogin;
 import com.example.javatest3.annotation.PassToken;
 import com.example.javatest3.pojo.MyAdmin;
@@ -24,6 +25,9 @@ public class JwtAuthenticationTokenFilter implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
+        if(!(handler instanceof HandlerMethod)){
+            return true;
+        }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         if(method.isAnnotationPresent(PassToken.class)){
@@ -37,7 +41,7 @@ public class JwtAuthenticationTokenFilter implements HandlerInterceptor {
             JwtUserLogin jwtUserLogin = method.getAnnotation(JwtUserLogin.class);
             if(jwtUserLogin.required()){
                 //判断
-                if(token==null){
+                if(ObjectUtil.isEmpty(token)){
                     throw new RuntimeException("没有token，请重新登录");
                 }
                 Claims claims = Token.parseJWT(token);
@@ -49,12 +53,12 @@ public class JwtAuthenticationTokenFilter implements HandlerInterceptor {
 
                 String username=claims.getAudience();
                 MyAdmin admin = myAdminService.firstMyAdminByName(username);
-                if(admin==null){
+                if(ObjectUtil.isEmpty(admin)){
                     throw new RuntimeException("用户不存在");
                 }
                 return true;
             }
         }
-        return true;
+        return false;
     }
 }

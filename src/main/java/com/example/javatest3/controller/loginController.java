@@ -3,6 +3,7 @@ package com.example.javatest3.controller;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.example.javatest3.annotation.JwtUserLogin;
+import com.example.javatest3.annotation.PassToken;
 import com.example.javatest3.common.Token;
 import com.example.javatest3.common.response;
 import com.example.javatest3.pojo.MyAdmin;
@@ -43,6 +44,7 @@ public class loginController {
         return "你已通过验证";
     }
 
+    @PassToken
     @GetMapping("/ok")
     public String ok(){
         return "测试springboot已准备就绪";
