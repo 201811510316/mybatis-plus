@@ -58,4 +58,10 @@ public class loginController {
     public List<MyAdmin> getDataAll(){
         return myAdminService.AllMyAdmin();
     }
+
+    @PassToken
+    @GetMapping("/user/data")
+    public String getUserData(){
+   	return "linux上编辑代码";
+    }
 }
